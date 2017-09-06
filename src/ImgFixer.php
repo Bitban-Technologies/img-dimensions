@@ -15,6 +15,8 @@ class ImgFixer
     private $widthCustomAttribute;
     /** @var string */
     private $heightCustomAttribute;
+    /** @var string */
+    private $baseUrl;
 
     /**
      * @param string $widthCustomAttribute
@@ -26,6 +28,35 @@ class ImgFixer
     ) {
         $this->widthCustomAttribute = $widthCustomAttribute;
         $this->heightCustomAttribute = $heightCustomAttribute;
+    }
+
+    /**
+     * @param string $baseUrl
+     * @return ImgFixer
+     */
+    public function setBaseUrl(string $baseUrl): self
+    {
+        $this->baseUrl = $baseUrl;
+        return $this;
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     * @throws \Exception
+     */
+    private function getAbsoluteUrl(string $url)
+    {
+        $aux = parse_url($url);
+        if (array_key_exists("host", $aux)) {
+            return $url;
+        }
+
+        if (!$this->baseUrl) {
+            throw new \Exception("Relative URLs cannot be parsed if baseUrl has not been previously set");
+        }
+
+        return $this->baseUrl . $url;
     }
 
     /**
@@ -66,6 +97,7 @@ class ImgFixer
      *
      * @param string[] $urls
      * @return int[][] Array asociativo. Para cada URL devueve un array con width y height
+     * @throws \Exception Si alguna de las URLs es relativa y no se ha indicado una URL base llamando a setBaseUrl()
      */
     public function fetchDimensions(array $urls): array
     {
@@ -74,7 +106,8 @@ class ImgFixer
         $tempFiles = [];
         foreach ($urls as $src) {
             $tmpFile = tempnam(sys_get_temp_dir(), __CLASS__);
-            $promises[$src] = $client->getAsync($src, ["sink" => $tmpFile]);
+            $url = $this->getAbsoluteUrl($src);
+            $promises[$src] = $client->getAsync($url, ["sink" => $tmpFile]);
             $tempFiles[$src] = $tmpFile;
         }
 
