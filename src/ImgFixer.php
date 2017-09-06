@@ -101,7 +101,7 @@ class ImgFixer
         foreach ($dimensions as $src => $dimension) {
             $width = $dimensions[$src][0];
             $height = $dimensions[$src][1];
-            $html = preg_replace("#(src=['\"]" . $src . "['\"])#", "$1 data-src-width=\"$width\" data-src-height=\"$height\"", $html);
+            $html = preg_replace("#(src=['\"]" . preg_quote($src) . "['\"])#", "$1 data-src-width=\"$width\" data-src-height=\"$height\"", $html);
         }
 
         return $html;

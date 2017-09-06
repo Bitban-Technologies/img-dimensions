@@ -15,17 +15,20 @@ class ImgFixerTest extends TestCase
         $fixer = new ImgFixer();
         $html = file_get_contents(__DIR__ . '/resources/images.html');
         $imgSrcList = $fixer->getImgSrcListFromHtml($html);
-        $this->assertCount(2, $imgSrcList);
+        $this->assertCount(3, $imgSrcList);
     }
 
     public function testFetchDimensions()
     {
         $fixer = new ImgFixer();
         $dimensions = $fixer->fetchDimensions([
+            "http://www.risasinmas.com/wp-content/uploads/2013/09/perrete-disfrazado.jpg?foo",
             "http://images.eldiario.es/clm/Foto-Smart-Dog_EDIIMA20160606_0306_18.jpg",
             "http://2.bp.blogspot.com/-HPvC7gFayFI/UJFHE-W0O0I/AAAAAAAAAGo/7TON-Fp6X00/s1600/IMG_3284.JPG"
         ]);
-        $this->assertCount(2, $dimensions);
+        $this->assertCount(3, $dimensions);
+        $this->assertSame(600, $dimensions["http://www.risasinmas.com/wp-content/uploads/2013/09/perrete-disfrazado.jpg?foo"][0]);
+        $this->assertSame(829, $dimensions["http://www.risasinmas.com/wp-content/uploads/2013/09/perrete-disfrazado.jpg?foo"][1]);
         $this->assertSame(643, $dimensions["http://images.eldiario.es/clm/Foto-Smart-Dog_EDIIMA20160606_0306_18.jpg"][0]);
         $this->assertSame(362, $dimensions["http://images.eldiario.es/clm/Foto-Smart-Dog_EDIIMA20160606_0306_18.jpg"][1]);
         $this->assertSame(1600, $dimensions["http://2.bp.blogspot.com/-HPvC7gFayFI/UJFHE-W0O0I/AAAAAAAAAGo/7TON-Fp6X00/s1600/IMG_3284.JPG"][0]);
@@ -37,6 +40,7 @@ class ImgFixerTest extends TestCase
         $fixer = new ImgFixer();
         $html = file_get_contents(__DIR__ . '/resources/images.html');
         $dimensions = [
+            "http://www.risasinmas.com/wp-content/uploads/2013/09/perrete-disfrazado.jpg?foo" => [1920, 1080],
             "http://images.eldiario.es/clm/Foto-Smart-Dog_EDIIMA20160606_0306_18.jpg" => [800, 600],
             "http://2.bp.blogspot.com/-HPvC7gFayFI/UJFHE-W0O0I/AAAAAAAAAGo/7TON-Fp6X00/s1600/IMG_3284.JPG" => [640, 480]
         ];
