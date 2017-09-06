@@ -1,6 +1,10 @@
 # Img Dimensions
 
-[![PHP 7.1](https://img.shields.io/badge/php-7.1-blue.svg)](http://php.net/manual/es/migration71.php) [![build status](https://gitlab.bitban.int/utils/img-dimensions/badges/master/build.svg)](https://gitlab.bitban.int/utils/img-dimensions/commits/master) [![coverage report](https://gitlab.bitban.int/utils/img-dimensions/badges/master/coverage.svg)](https://gitlab.bitban.int/utils/img-dimensions/commits/master)
+[![PHP 7.1](https://img.shields.io/badge/php-7.1-blue.svg)](http://php.net/manual/es/migration71.php) 
+[![Latest Stable Version](https://poser.pugx.org/bitban/img-dimensions/v/stable)](https://packagist.org/packages/bitban/img-dimensions)
+[![License](https://poser.pugx.org/bitban/img-dimensions/license)](https://packagist.org/packages/bitban/img-dimensions)
+[![Build Status](https://travis-ci.org/bitban/img-dimensions.svg?branch=master)](https://travis-ci.org/bitban/img-dimensions)
+[![Coverage Status](https://coveralls.io/repos/github/bitban/img-dimensions/badge.svg?branch=master)](https://coveralls.io/github/bitban/img-dimensions?branch=master)
 
 Librería que permite modificar un HTML añadiendo las medidas de las imágenes que no las tienen.
 
