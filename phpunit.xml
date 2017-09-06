@@ -4,7 +4,7 @@
   ~ Todos los derechos reservados.
   -->
 
-<phpunit colors="true">
+<phpunit colors="true" bootstrap="vendor/autoload.php">
     <testsuites>
         <testsuite name="Suite de pruebas unitarias">
             <directory>./tests/</directory>
@@ -18,5 +18,8 @@
             </exclude>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
 </phpunit>
 

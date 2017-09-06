@@ -1,0 +1,8 @@
+language: php
+php:
+  - '7.1'
+install:
+  - mkdir -p build/logs
+  - composer install
+after_success:
+  - travis_retry php bin/coveralls

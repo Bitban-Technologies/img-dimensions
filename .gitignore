@@ -2,4 +2,5 @@
 /bin
 /reports
 composer.lock
-
+.idea/
+/build

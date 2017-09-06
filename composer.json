@@ -2,7 +2,10 @@
     "name": "bitban/img-dimensions",
     "description": "Librería que permite calcular las dimensiones de imágenes al vuelo",
     "minimum-stability": "stable",
-    "license": "proprietary",
+    "license": "MIT",
+    "keywords": [
+        "html"
+    ],
     "type": "library",
     "authors": [
         {
@@ -15,7 +18,6 @@
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
-        "bitban/php-code-quality-tools": "dev-master",
         "phpunit/phpunit": "^6.3"
     },
     "autoload": {
@@ -34,13 +36,5 @@
         "preferred-install": {
             "*": "dist"
         }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkHooks"
-        ],
-        "post-update-cmd": [
-            "Bitban\\PhpCodeQualityTools\\Composer\\ScriptHandler::checkHooks"
-        ]
     }
 }
