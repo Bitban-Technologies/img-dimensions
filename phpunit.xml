@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 Bitban Technologies, S.L.
+  ~ Todos los derechos reservados.
+  -->
+
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Suite de pruebas unitarias">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+            <exclude>
+                <directory>tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
+

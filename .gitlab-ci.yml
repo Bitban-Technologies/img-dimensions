@@ -1,0 +1,8 @@
+before_script:
+- bash ci/docker_install_php.sh > /dev/null
+
+test:7.1:
+  image: php:7.1
+  script:
+    - bin/phpunit --coverage-text --colors=never --configuration phpunit.xml
+
