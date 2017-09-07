@@ -42,25 +42,6 @@ class ImgFixer
     }
 
     /**
-     * @param string $url
-     * @return string
-     * @throws \Exception
-     */
-    private function getAbsoluteUrl(string $url)
-    {
-        $aux = parse_url($url);
-        if (array_key_exists("host", $aux)) {
-            return $url;
-        }
-
-        if (!$this->baseUrl) {
-            throw new \Exception("Relative URLs cannot be parsed if baseUrl has not been previously set");
-        }
-
-        return $this->baseUrl . $url;
-    }
-
-    /**
      * A partir de un HTML, obtiene la lista de URLs de imágenes cuyas medidas se desconocen
      *
      * @param string $html
@@ -102,22 +83,24 @@ class ImgFixer
      */
     public function fetchDimensions(array $urls): array
     {
-        $client = new Client(["http_errors" => false]);
-        $promises = []; // URLs absolutas y relativas (convertidas en absolutas)
+        $client = new Client([
+            "base_uri" => $this->baseUrl,
+            "http_errors" => false]
+        );
+        $promises = []; // URLs
         $inliners = []; // Imágenes inline
 
         $tempFiles = [];
-        foreach ($urls as $src) {
+        foreach ($urls as $url) {
 
-            if (0 === strpos($src, "data:")) {
-                $inliners[] = $src;
+            if (0 === strpos($url, "data:")) {
+                $inliners[] = $url;
                 continue;
             }
 
             $tmpFile = tempnam(sys_get_temp_dir(), __CLASS__);
-            $url = $this->getAbsoluteUrl($src);
-            $promises[$src] = $client->getAsync($url, ["sink" => $tmpFile]);
-            $tempFiles[$src] = $tmpFile;
+            $promises[$url] = $client->getAsync($url, ["sink" => $tmpFile]);
+            $tempFiles[$url] = $tmpFile;
         }
 
         $dimensions = [];
