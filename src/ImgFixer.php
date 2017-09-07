@@ -85,8 +85,8 @@ class ImgFixer
     {
         $client = new Client([
             "base_uri" => $this->baseUrl,
-            "http_errors" => false]
-        );
+            "http_errors" => false
+        ]);
         $promises = []; // URLs
         $inliners = []; // Imágenes inline
 
