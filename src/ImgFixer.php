@@ -8,6 +8,7 @@ namespace Bitban\Utils\ImgDimensions;
 use DOMDocument;
 use GuzzleHttp\Client;
 use function GuzzleHttp\Promise\unwrap;
+use GuzzleHttp\Psr7\Response;
 
 class ImgFixer
 {
@@ -101,22 +102,42 @@ class ImgFixer
      */
     public function fetchDimensions(array $urls): array
     {
-        $client = new Client();
-        $promises = [];
+        $client = new Client(["http_errors" => false]);
+        $promises = []; // URLs absolutas y relativas (convertidas en absolutas)
+        $inliners = []; // Imágenes inline
+
         $tempFiles = [];
         foreach ($urls as $src) {
+
+            if (0 === strpos($src, "data:")) {
+                $inliners[] = $src;
+                continue;
+            }
+
             $tmpFile = tempnam(sys_get_temp_dir(), __CLASS__);
             $url = $this->getAbsoluteUrl($src);
             $promises[$src] = $client->getAsync($url, ["sink" => $tmpFile]);
             $tempFiles[$src] = $tmpFile;
         }
 
-        $results = unwrap($promises);
-
         $dimensions = [];
+
+        // Procesamos las imágenes que nos hemos descargado
+        $results = unwrap($promises);
         foreach ($results as $src => $result) {
+            /** @var Response $result */
+            if (200 !== $result->getStatusCode()) {
+                // TODO ¿Apuntamos la URL errónea en algún sitio?
+                continue;
+            }
             $size = getimagesize($tempFiles[$src]);
             $dimensions[$src] = [$size[0], $size[1]];
+        }
+
+        // Añadimos las imágenes inline
+        foreach ($inliners as $data) {
+            $size = getimagesize($data);
+            $dimensions[$data] = [$size[0], $size[1]];
         }
 
         return $dimensions;
