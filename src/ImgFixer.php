@@ -18,6 +18,8 @@ class ImgFixer
     private $heightCustomAttribute;
     /** @var string */
     private $baseUrl;
+    /** @var bool */
+    private $skipSslVerification = false;
 
     /**
      * @param string $widthCustomAttribute
@@ -38,6 +40,15 @@ class ImgFixer
     public function setBaseUrl(string $baseUrl): self
     {
         $this->baseUrl = $baseUrl;
+        return $this;
+    }
+
+    /**
+     * @return ImgFixer
+     */
+    public function skipSslVerification(): self
+    {
+        $this->skipSslVerification = true;
         return $this;
     }
 
@@ -74,6 +85,21 @@ class ImgFixer
         return $missing;
     }
 
+    private function getClientOptions()
+    {
+        if (true !== $this->skipSslVerification()) {
+            return [];
+        }
+
+        return [
+            "verify" => false,
+            "curl" =>[
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false
+            ]
+        ];
+    }
+
     /**
      * A partir de una lista de URLs de imágenes, las descarga y obtiene sus medidas
      *
@@ -99,7 +125,11 @@ class ImgFixer
             }
 
             $tmpFile = tempnam(sys_get_temp_dir(), __CLASS__);
-            $promises[$url] = $client->getAsync($url, ["sink" => $tmpFile]);
+            $clientOptions = array_merge(
+                ["sink" => $tmpFile],
+                $this->getClientOptions()
+            );
+            $promises[$url] = $client->getAsync($url, $clientOptions);
             $tempFiles[$url] = $tmpFile;
         }
 
