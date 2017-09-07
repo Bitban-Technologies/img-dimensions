@@ -87,7 +87,7 @@ class ImgFixer
 
     private function getClientOptions()
     {
-        if (true !== $this->skipSslVerification()) {
+        if (true !== $this->skipSslVerification) {
             return [];
         }
 
